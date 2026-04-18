@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>MINDCRAFT | Block-Building Minds | Coaching Center</title>
+    <!-- Google Fonts: Minecraft-style inspired (pixelated / clean but readable) -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #8B8C5A;  /* Minecraft dirt/grass blend base */
+            background-image: repeating-linear-gradient(
+                0deg,
+                rgba(60, 60, 40, 0.2) 0px,
+                rgba(60, 60, 40, 0.2) 2px,
+                transparent 2px,
+                transparent 8px
+            );
+            color: #2d2b1f;
+            line-height: 1.5;
+            image-rendering: crisp-edges;
+        }
+
+        /* Minecraft blocky container style */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* pixelated border effect for cards */
+        .pixel-border {
+            border: 4px solid #2d2b1f;
+            box-shadow: 6px 6px 0px 0px #1e1c13;
+        }
+
+        /* Navigation - blocky and sturdy like Minecraft UI */
+        .navbar {
+            background: #5A5C3C;
+            border-bottom: 6px solid #3A3C24;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 8px 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 24px;
+            max-width: 1280px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .logo h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.7rem;
+            letter-spacing: 2px;
+            background: #FFD966;
+            color: #2C2B26;
+            text-shadow: 3px 3px 0 #B97F10;
+            display: inline-block;
+            padding: 6px 12px;
+            border: 3px solid #2d2b1f;
+            box-shadow: 5px 5px 0 #3a351f;
+        }
+
+        .logo span {
+            font-family: 'Inter', sans-serif;
+            font-weight: bold;
+            background: #3b3e2a;
+            color: #f0e6a0;
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            margin-left: 8px;
+            border: 2px solid #21201a;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 800;
+            color: #F9E0A0;
+            background: #3f412b;
+            padding: 8px 16px;
+            border: 2px solid #23201a;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7rem;
+            transition: 0.1s linear;
+            box-shadow: 3px 3px 0 #1f1e14;
+        }
+
+        .nav-links a:hover {
+            background: #FFB347;
+            color: #1f2a0e;
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0 #1f1e14;
+        }
+
+        .btn-outline {
+            background: #FFC857;
+            color: #2d2b1f;
+            border: 3px solid #6b4c1a;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7rem;
+        }
+
+        /* Hero section - grass block vibes */
+        .hero {
+            background: #7C8B4A;
+            border-bottom: 6px solid #5D6B38;
+            padding: 60px 0 50px;
+            position: relative;
+        }
+
+        .hero::before {
+            content: "🧱";
+            font-size: 80px;
+            opacity: 0.1;
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            pointer-events: none;
+        }
+
+        .hero-grid {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .hero-content {
+            flex: 1;
+        }
+
+        .hero-badge {
+            background: #2C2F24;
+            display: inline-block;
+            padding: 8px 16px;
+            color: #FFD966;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7rem;
+            border: 2px solid #1e1c14;
+            margin-bottom: 24px;
+        }
+
+        .hero-content h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 2.3rem;
+            line-height: 1.3;
+            margin-bottom: 20px;
+            color: #FFE484;
+            text-shadow: 4px 4px 0 #5E3A0C;
+        }
+
+        .highlight {
+            background: #FFC107;
+            color: #2C2B1F;
+            padding: 0 8px;
+            display: inline-block;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #23200c;
+            background: rgba(0,0,0,0.2);
+            padding: 12px;
+            border-left: 8px solid #FFB347;
+            margin-bottom: 28px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 32px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            background: #3C3E2A;
+            padding: 10px 16px;
+            border: 3px solid #27251e;
+            text-align: center;
+            font-weight: bold;
+            color: #FCE181;
+        }
+
+        .stat-number {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.8rem;
+            display: block;
+        }
+
+        .hero-image {
+            flex: 1;
+            background: #6B6E48;
+            border: 6px solid #47482E;
+            padding: 24px;
+            text-align: center;
+            image-rendering: pixelated;
+        }
+
+        .hero-image i {
+            font-size: 8rem;
+            color: #C0A050;
+            text-shadow: 5px 5px 0 #4e3b1a;
+        }
+
+        /* section titles */
+        .section-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.8rem;
+            text-align: center;
+            color: #FFDD77;
+            background: #3A412C;
+            display: inline-block;
+            padding: 12px 24px;
+            margin-bottom: 20px;
+            border: 3px solid #21201a;
+            box-shadow: 6px 6px 0 #232018;
+        }
+
+        .title-wrapper {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-sub {
+            text-align: center;
+            max-width: 650px;
+            margin: 16px auto 0;
+            font-weight: bold;
+            background: #E9E3B0;
+            padding: 8px 16px;
+            border: 2px solid #50542e;
+        }
+
+        /* card grid (blocky minecraft cards) */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 32px;
+        }
+
+        .course-card {
+            background: #B4B87A;
+            border: 5px solid #4C4E2E;
+            padding: 28px 20px;
+            transition: transform 0.1s ease;
+            box-shadow: 8px 8px 0 #2A2B1A;
+        }
+
+        .course-card:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 12px 12px 0 #1f2013;
+            background: #C4C88E;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            background: #5A5C34;
+            display: inline-block;
+            padding: 12px;
+            border: 3px solid #2e301c;
+            margin-bottom: 20px;
+            color: #FFE085;
+        }
+
+        .course-card h3 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.1rem;
+            margin-bottom: 14px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #2D2F1E;
+            color: #FFD966;
+            padding: 6px 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            border: 2px solid black;
+            font-family: monospace;
+        }
+
+        /* features grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .feature-item {
+            background: #868F54;
+            border: 4px solid #3E4528;
+            padding: 24px 12px;
+            text-align: center;
+            box-shadow: 6px 6px 0 #2e3020;
+        }
+
+        .feature-item i {
+            font-size: 2.5rem;
+            background: #FFC857;
+            padding: 12px;
+            border-radius: 0px;
+            border: 3px solid #4a3c1a;
+            color: #2e2b1a;
+        }
+
+        /* testimonial (blocky) */
+        .testimonial-card {
+            background: #A1A56C;
+            border: 5px solid #4F5630;
+            padding: 24px;
+            box-shadow: 7px 7px 0 #2A2D18;
+        }
+
+        /* CTA - like diamond block */
+        .cta-section {
+            background: #3F794B;
+            border: 6px solid #1F512A;
+            padding: 48px 32px;
+            text-align: center;
+            margin: 40px 0;
+            box-shadow: 12px 12px 0 #1C391F;
+        }
+
+        .cta-section h2 {
+            font-family: 'Press Start 2P', cursive;
+            color: #FFE259;
+            text-shadow: 3px 3px 0 #366b1a;
+        }
+
+        .btn-primary {
+            background: #FFB347;
+            font-family: 'Press Start 2P', cursive;
+            border: none;
+            padding: 14px 28px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-top: 20px;
+            border: 3px solid #7A4C1A;
+            cursor: pointer;
+            box-shadow: 6px 6px 0 #3c2c12;
+            transition: 0.05s linear;
+        }
+
+        .btn-primary:active {
+            transform: translate(2px, 2px);
+            box-shadow: 3px 3px 0 #3c2c12;
+        }
+
+        /* form block */
+        .form-block {
+            background: #9DAA6B;
+            border: 5px solid #4C5530;
+            padding: 24px;
+            box-shadow: 8px 8px 0 #353e1e;
+        }
+
+        input, select {
+            background: #F2EFC7;
+            border: 3px solid #3a3c24;
+            padding: 12px;
+            font-weight: bold;
+            font-family: 'Inter', monospace;
+        }
+
+        footer {
+            background: #2F3120;
+            border-top: 8px solid #4B4F2E;
+            color: #CDD28C;
+            padding: 40px 0 20px;
+        }
+
+        .footer-logo h3 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.3rem;
+            color: #FAC05E;
+        }
+
+        .copyright {
+            text-align: center;
+            border-top: 3px solid #4F5532;
+            padding-top: 24px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 750px) {
+            .hero-content h1 {
+                font-size: 1.6rem;
+            }
+            .nav-links a {
+                font-size: 0.5rem;
+                padding: 6px 12px;
+            }
+        }
+
+        /* minecraft grass block pattern */
+        .minecraft-pattern {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16"><rect width="16" height="16" fill="#7c8b4a"/><rect x="0" y="0" width="4" height="4" fill="#5d6b38"/><rect x="8" y="8" width="4" height="4" fill="#5d6b38"/><rect x="4" y="12" width="4" height="4" fill="#5d6b38"/><rect x="12" y="4" width="4" height="4" fill="#5d6b38"/></svg>');
+            background-repeat: repeat;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo">
+            <h1>MINDCRAFT<span>⚡ v.1.19</span></h1>
+        </div>
+        <div class="nav-links">
+            <a href="#home">🏠 HOME</a>
+            <a href="#courses">📚 COURSES</a>
+            <a href="#why-us">⚙️ WHY US</a>
+            <a href="#contact">📡 CONTACT</a>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLScLGycQa05mXqTH2dZa1YxzZyxxPRXDMttIeQQhcAeycS5niQ/viewform?usp=publish-editor" class="btn-outline" id="enrollBtnNav">🎮 ENROLL</a>
+        </div>
+    </div>
+</nav>
+
+<main>
+    <!-- Hero / home section with Minecraft essence -->
+    <section id="home" class="hero">
+        <div class="container hero-grid">
+            <div class="hero-content">
+                <div class="hero-badge"><i class="fas fa-cube"></i> NEW SEASON: 2026 BATCH</div>
+                <h1>CRAFT YOUR <span class="highlight">MINDCRAFT</span><br>FUTURE, BLOCK BY BLOCK</h1>
+                <p><i class="fas fa-pickaxe"></i> Mine knowledge, build success! Coaching for JEE | NEET | Boards | Olympiads — with creative strategies and pixel-perfect results.</p>
+                <div class="hero-stats">
+                    <div class="stat-item"><span class="stat-number" data-target="98">0%</span> Success Rate</div>
+                    <div class="stat-item"><span class="stat-number" data-target="21">0+</span> Expert Faculty</div>
+                    <div class="stat-item"><span class="stat-number" data-target="12">0k+</span> Students Trained</div>
+                </div>
+                <button class="btn-primary" id="heroEnrollBtn">🔨 START YOUR QUEST →</button>
+            </div>
+            <div class="hero-image">
+                <i class="fas fa-drafting-compass"></i>
+                <p style="font-weight: bold; margin-top: 16px; background:#00000070; padding: 8px; color:#FFE484;">⚡ "Where redstone meets reason" ⚡</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses - like enchantment table -->
+    <section id="courses" class="section" style="padding: 70px 0;">
+        <div class="container">
+            <div class="title-wrapper">
+                <div class="section-title">📖 STUDY MODS</div>
+                <div class="section-sub">Choose your path, unlock abilities, master the exams</div>
+            </div>
+            <div class="cards-grid">
+                <div class="course-card">
+                    <div class="card-icon"><i class="fas fa-crown"></i></div>
+                    <h3>⚡ JEE (Main+Adv)</h3>
+                    <p>Physics, Chemistry, Math — extreme problem-solving, weekly raids, and test series like netherite armor.</p>
+                    <span class="tag">🔥 ELITE TRACK</span>
+                </div>
+                <div class="course-card">
+                    <div class="card-icon"><i class="fas fa-heartbeat"></i></div>
+                    <h3>🩺 NEET (UG)</h3>
+                    <p>Conquer Biology & sciences with NCERT mastery + potion-effect revision modules.</p>
+                    <span class="tag">🍎 MEDICRAFT</span>
+                </div>
+                <div class="course-card">
+                    <div class="card-icon"><i class="fas fa-tree"></i></div>
+                    <h3>🌲 FOUNDATION (8-10)</h3>
+                    <p>Build your base strong for Olympiads & NTSE — block by block conceptual learning.</p>
+                    <span class="tag">🧱 EARLY GAME</span>
+                </div>
+                <div class="course-card">
+                    <div class="card-icon"><i class="fas fa-chalkboard"></i></div>
+                    <h3>📖 BOARD EXPRESS</h3>
+                    <p>Score 95%+ with enchanting notes, 1-1 doubt slaying & crash courses.</p>
+                    <span class="tag">✨ ENDER DRAGON</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why us: unique Minecraft features -->
+    <section id="why-us" style="background: #6E7448; padding: 70px 0; border-top: 6px solid #4B522F; border-bottom: 6px solid #4B522F;">
+        <div class="container">
+            <div class="title-wrapper">
+                <div class="section-title">🔨 WHY MINDCRAFT?</div>
+                <div class="section-sub">Features that give you creative mode in studies</div>
+            </div>
+            <div class="features-grid">
+                <div class="feature-item"><i class="fas fa-gem"></i><h4>Diamond Mentors</h4><p>IIT/NIT alumni & expert faculty, always in your corner.</p></div>
+                <div class="feature-item"><i class="fas fa-tachometer-alt"></i><h4>Redstone Analytics</h4><p>Performance trackers & smart feedback loops.</p></div>
+                <div class="feature-item"><i class="fas fa-server"></i><h4>Multiplayer Mode</h4><p>Group studies, leaderboards & peer-to-peer challenges.</p></div>
+                <div class="feature-item"><i class="fas fa-campground"></i><h4>Survival Kits</h4><p>Personalized doubt sessions & 24/7 resource hub.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials with Minecraft vibe -->
+    <section style="padding: 70px 0;">
+        <div class="container">
+            <div class="title-wrapper">
+                <div class="section-title">🌟 PLAYER REVIEWS</div>
+                <div class="section-sub">What our ‘mindcrafters’ say about their journey</div>
+            </div>
+            <div class="cards-grid">
+                <div class="testimonial-card"><i class="fas fa-quote-right" style="font-size: 2rem; color:#FFD966;"></i><div style="margin: 16px 0;">"Mindcraft didn't just teach me physics – they gave me a strategy guide! Cracked IIT with 99.7%ile. Best decision ever!"</div><div class="tag">— Aarav S. (IIT Bombay)</div></div>
+                <div class="testimonial-card"><i class="fas fa-quote-right" style="font-size: 2rem; color:#FFD966;"></i><div style="margin: 16px 0;">"NEET preparation felt like a boss fight, but Mindcraft's modules and test series gave me the enchanted gear. AIR 845!"</div><div class="tag">— Riya M. (AIIMS Delhi)</div></div>
+                <div class="testimonial-card"><i class="fas fa-quote-right" style="font-size: 2rem; color:#FFD966;"></i><div style="margin: 16px 0;">"The foundation course unlocked my potential. Now I'm top of my class and won state olympiad. Thanks Mindcraft!"</div><div class="tag">— Karan V. (Grade 9)</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA and contact form block -->
+    <div class="container" id="contact">
+        <div class="cta-section">
+            <h2><i class="fas fa-dragon"></i> JOIN THE NEXT CRAFTING SESSION</h2>
+            <p>Limited seats for 2026 batch — Free demo class + Career counseling + MINDCRAFT Starter Kit</p>
+            <button class="btn-primary" id="ctaEnrollBtn">⚡ CLAIM YOUR SPOT ⚡</button>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 40px; margin-bottom: 70px; justify-content: space-between;">
+            <div style="flex:1; background: #868F54; border: 5px solid #3E4528; padding: 28px; box-shadow: 8px 8px 0 #2b2e1b;">
+                <h3 style="font-family: 'Press Start 2P', cursive; font-size: 1rem; margin-bottom: 24px;"><i class="fas fa-map-signs"></i> CONTACT SERVER</h3>
+                <p><i class="fas fa-envelope"></i> craft@mindcraft.center</p>
+                <p><i class="fas fa-phone-alt"></i> +91 98765 43210</p>
+                <p><i class="fas fa-clock"></i> Mon-Sat: 9am – 8pm (IST)</p>
+                <div style="margin-top: 28px;">
+                    <i class="fab fa-discord" style="font-size: 2rem; margin-right: 16px;"></i>
+                    <i class="fab fa-twitch" style="font-size: 2rem; margin-right: 16px;"></i>
+                    <i class="fab fa-youtube" style="font-size: 2rem;"></i>
+                </div>
+            </div>
+            <div style="flex:1.5;" class="form-block">
+                <h3 style="font-family: 'Press Start 2P', cursive; margin-bottom: 24px;">📡 SEND REDSTONE SIGNAL</h3>
+                <form id="contactForm">
+                    <input type="text" id="nameInput" placeholder="Your IGN (Name)" style="width:100%; margin-bottom: 16px;" required>
+                    <input type="email" id="emailInput" placeholder="Email address" style="width:100%; margin-bottom: 16px;" required>
+                    <select id="courseSelect" style="width:100%; margin-bottom: 24px;">
+                        <option>Select your quest →</option>
+                        <option>JEE (Main+Advanced)</option>
+                        <option>NEET (UG)</option>
+                        <option>Foundation (8-10)</option>
+                        <option>Board Express (11-12)</option>
+                    </select>
+                    <button type="submit" class="btn-primary" style="width:100%; margin-top: 0;">📨 Submit → Teleport</button>
+                    <p id="formFeedback" style="margin-top: 18px; font-weight: bold; color: #1E2F0A;"></p>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="container" style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 30px;">
+        <div class="footer-logo">
+            <h3>MINDCRAFT</h3>
+            <p>Building minds, one block at a time.</p>
+            <p style="margin-top: 12px;"><i class="fas fa-cube"></i> Knowledge Biome, India</p>
+        </div>
+        <div>
+            <h4>📌 Quick Crafting</h4>
+            <a href="#home" style="color:#CFD58C; display:block; text-decoration: none;">Home</a>
+            <a href="#courses" style="color:#CFD58C; display:block; text-decoration: none;">Courses</a>
+            <a href="#why-us" style="color:#CFD58C; display:block; text-decoration: none;">Why Mindcraft</a>
+        </div>
+        <div>
+            <h4>📜 Server Rules</h4>
+            <p style="font-size: 0.8rem;">Privacy Policy | Terms of Use</p>
+            <p style="font-size: 0.8rem;">Refund policy | FAQ</p>
+        </div>
+    </div>
+    <div class="copyright container">
+        <p>© 2025 Mindcraft Coaching — Level Up Your Future. All rights reserved. 🧱 Not an official Minecraft product.</p>
+        <p style="margin-top: 8px;">⚡ CRAFT ⚡ LEARN ⚡ ACHIEVE ⚡</p>
+    </div>
+</footer>
+
+<script>
+    // Minecraft blocky interactive alerts and form handler
+    function showMinecraftEnroll() {
+        alert("🧱 Welcome to MINDCRAFT! 🧱\n\nAn academic advisor will contact you soon.\nGet ready to mine your potential!");
+    }
+    document.getElementById('enrollBtnNav')?.addEventListener('click', showMinecraftEnroll);
+    document.getElementById('heroEnrollBtn')?.addEventListener('click', showMinecraftEnroll);
+    document.getElementById('ctaEnrollBtn')?.addEventListener('click', showMinecraftEnroll);
+
+    // stats counter animation (pixel style)
+    const statNumbers = document.querySelectorAll('.stat-number');
+    const animateStats = () => {
+        statNumbers.forEach(el => {
+            const target = parseInt(el.getAttribute('data-target'));
+            if (!isNaN(target) && !el.classList.contains('animated')) {
+                let current = 0;
+                const step = Math.ceil(target / 45);
+                const interval = setInterval(() => {
+                    current += step;
+                    if (current >= target) {
+                        el.innerText = target + (el.innerText.includes('%') ? '%' : '+');
+                        clearInterval(interval);
+                        el.classList.add('animated');
+                    } else {
+                        el.innerText = current + (el.innerText.includes('%') ? '%' : '+');
+                    }
+                }, 25);
+            }
+        });
+    };
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting) {
+                animateStats();
+                observer.disconnect();
+            }
+        });
+    }, { threshold: 0.4 });
+    const heroStatsDiv = document.querySelector('.hero-stats');
+    if(heroStatsDiv) observer.observe(heroStatsDiv);
+
+    // Contact form submission (simulate)
+    const form = document.getElementById('contactForm');
+    const feedback = document.getElementById('formFeedback');
+    if(form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('nameInput')?.value.trim();
+            const email = document.getElementById('emailInput')?.value.trim();
+            const course = document.getElementById('courseSelect')?.value;
+            if(!name || !email) {
+                feedback.innerText = "⚠️ Please fill both name and email!";
+                feedback.style.color = "#AA2E1E";
+                return;
+            }
+            if(!email.includes('@')) {
+                feedback.innerText = "📧 Enter a valid email address!";
+                return;
+            }
+            feedback.innerHTML = `✅ ${name}, your request for ${course} has been received! A crafter will contact you soon.`;
+            feedback.style.color = "#1F4F1A";
+            document.getElementById('nameInput').value = '';
+            document.getElementById('emailInput').value = '';
+            setTimeout(() => {
+                alert(`🎮 ${name}, welcome to Mindcraft! We'll send you the demo details & e-brochure. Get ready to build your future.`);
+            }, 80);
+        });
+    }
+
+    // smooth scroll for anchor links (Minecraft style)
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const targetId = this.getAttribute('href');
+            if(targetId === "#" || targetId === "") return;
+            const target = document.querySelector(targetId);
+            if(target) {
+                e.preventDefault();
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+</script>
+</body>
+</html>
