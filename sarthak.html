@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MindCraft Coaching | Excellence Class 1-10</title>
+
+    <style>
+        :root {
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --accent: #10b981;
+            --toggle-bg: #87CEEB;
+            --toggle-thumb: #FFD700;
+            --border: #e2e8f0;
+            --nav-height: 72px;
+            --nav-height-scrolled: 56px;
+            --safe-gap: 16px;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent: #34d399;
+            --toggle-bg: #2c3e50;
+            --toggle-thumb: #f1c40f;
+            --border: #334155;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        html { scroll-behavior: smooth; }
+        body { background: var(--bg-primary); color: var(--text-primary); transition: background 0.4s ease, color 0.4s ease; overflow-x: hidden; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+        }
+        .floating { animation: float 6s ease-in-out infinite; }
+
+        /* Navbar */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 14px 5%; background: var(--bg-secondary);
+            position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            height: var(--nav-height);
+            transition: height 0.28s ease, padding 0.28s ease, background 0.28s ease, box-shadow 0.28s ease;
+        }
+        .navbar.scrolled {
+            height: var(--nav-height-scrolled);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            border-bottom-color: transparent;
+            transform: translateZ(0);
+        }
+        .logo { height: 48px; border-radius: 10px; object-fit:cover; }
+
+        /* Navigation Menu */
+        nav { display:flex; align-items:center; gap: 24px; }
+        nav ul {
+            display: flex; gap: 24px; list-style: none;
+        }
+        nav ul li a {
+            text-decoration: none; color: var(--text-primary);
+            font-weight: 600; transition: color 0.25s;
+            padding: 8px 6px; border-radius: 8px;
+        }
+        nav ul li a:hover, nav ul li a:focus { color: var(--accent); outline: none; }
+
+        /* Mobile menu */
+        .mobile-toggle {
+            display: none; background: transparent; border: none; cursor: pointer;
+            padding: 8px; border-radius: 8px;
+        }
+        .mobile-toggle svg { width: 28px; height: 28px; color: var(--text-primary); }
+
+        .mobile-nav {
+            display: none;
+            position: absolute; top: calc(var(--nav-height)); right: 5%;
+            background: var(--bg-secondary); border: 1px solid var(--border);
+            border-radius: 12px; padding: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            min-width: 200px;
+        }
+        .mobile-nav a { display:block; padding: 10px 12px; color:var(--text-primary); text-decoration:none; font-weight:600; border-radius:8px; }
+        .mobile-nav a:hover { background: rgba(16,185,129,0.06); color:var(--accent); }
+
+        /* Theme Toggle */
+        .theme-switch-wrapper { display: flex; align-items: center; gap: 10px; }
+        .theme-switch { display: inline-block; height: 34px; position: relative; width: 60px; }
+        .theme-switch input { display: none; }
+        .slider {
+            background-color: var(--toggle-bg);
+            bottom: 0; cursor: pointer; left: 0; position: absolute; right: 0; top: 0;
+            transition: .4s; border-radius: 34px;
+        }
+        .slider:before {
+            background-color: var(--toggle-thumb);
+            bottom: 4px; content: ""; height: 26px; left: 4px;
+            position: absolute; transition: .4s; width: 26px; border-radius: 50%;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Hero */
+        .hero { padding: 100px 5% 60px; text-align: center; }
+        .hero-img { max-width: 450px; width: 85%; margin: 0 auto 30px; border-radius: 20px; display:block; }
+        .hero h1 { font-size: clamp(2rem, 6vw, 4rem); font-weight: 800; margin-bottom: 20px; line-height:1.05; }
+        .hero span { color: var(--accent); }
+
+        .reg-btn {
+            background: var(--accent); color: white !important;
+            padding: 15px 40px; border-radius: 50px;
+            font-weight: 600; text-decoration: none;
+            display: inline-block; transition: transform 0.25s, box-shadow 0.25s;
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+        .reg-btn:hover, .reg-btn:focus { transform: translateY(-4px); outline: none; }
+
+        /* Cards */
+        .grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px; padding: 60px 5%; max-width: 1200px; margin: auto;
+        }
+        .card {
+            background: var(--bg-secondary); padding: 28px; border-radius: 20px;
+            border: 1px solid var(--border); text-align: center;
+            transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+        }
+        .card:hover { border-color: var(--accent); transform: translateY(-6px); box-shadow: 0 12px 30px rgba(16,185,129,0.06); }
+
+        /* About Section */
+        #about {
+            padding: 80px 5%; text-align: center;
+            max-width: 900px; margin: auto;
+            opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        #about.in-view { opacity: 1; transform: translateY(0); }
+
+        /* Reveal utility for other sections */
+        .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .reveal.in-view { opacity: 1; transform: translateY(0); }
+
+        /* Enroll & Contact */
+        #enroll { text-align:center; padding: 80px 20px; background: var(--bg-secondary); border-radius: 20px; margin: 24px 5%; }
+        #contact {
+            padding: 60px 5%; text-align: center;
+            background: var(--bg-secondary);
+            border-radius: 20px; margin: 24px 5%;
+        }
+
+        footer { padding: 24px; text-align: center; color: var(--text-secondary); margin-top: 30px; }
+
+        /* Floating contact buttons */
+        .contact-float {
+            position: fixed; right: var(--safe-gap); bottom: var(--safe-gap); display:flex; flex-direction:column; gap:12px; z-index:1200;
+        }
+        .contact-btn {
+            display:inline-flex; align-items:center; gap:10px;
+            background: var(--bg-secondary); color: var(--text-primary);
+            padding: 12px 14px; border-radius: 999px; border: 1px solid var(--border);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08); text-decoration:none; font-weight:700;
+            transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease;
+            touch-action: manipulation;
+        }
+        .contact-btn svg { width:20px; height:20px; display:block; }
+        .contact-btn:hover, .contact-btn:focus { transform: translateY(-4px); background: var(--accent); color: #fff; outline:none; }
+        .contact-btn.whatsapp { border-color: rgba(37,211,102,0.15); }
+        .contact-btn.instagram { border-color: rgba(225,48,108,0.12); }
+
+        /* Small screens */
+        @media (max-width: 900px) {
+            .navbar { padding: 10px 4%; }
+            nav ul { display:none; }
+            .mobile-toggle { display:block; }
+            .hero { padding: 80px 5% 40px; }
+            .hero-img { width: 60%; }
+            .reg-btn { padding: 12px 28px; font-size: 0.95rem; }
+            .card { padding: 20px; border-radius: 16px; }
+            .contact-btn { padding: 12px 14px; font-size: 0.95rem; }
+            .mobile-nav { right: 4%; top: calc(var(--nav-height)); width: calc(100% - 40px); left: 20px; }
+        }
+
+        @media (max-width: 480px) {
+            :root { --safe-gap: 12px; }
+            .logo { height: 40px; }
+            .hero-img { width: 72%; }
+            .hero h1 { font-size: 1.8rem; }
+            .contact-btn { padding: 12px 12px; font-size: 0.95rem; border-radius: 999px; }
+            .contact-float { right: 12px; bottom: 12px; gap:10px; }
+            .mobile-nav { top: calc(var(--nav-height)); left: 12px; right: 12px; }
+        }
+
+        /* Accessibility focus */
+        a:focus, button:focus { box-shadow: 0 0 0 3px rgba(16,185,129,0.12); border-radius:8px; }
+
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="navbar" id="navbar">
+        <img src="logo.jpeg" class="logo" alt="MindCraft Coaching Logo">
+
+        <nav aria-label="Primary navigation">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#enroll">Enroll</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+
+        <div style="display:flex; align-items:center; gap:12px;">
+            <div class="theme-switch-wrapper" aria-hidden="false">
+                <label class="theme-switch" for="checkbox">
+                    <input type="checkbox" id="checkbox" onchange="toggleTheme()" aria-label="Toggle dark mode" />
+                    <div class="slider" role="switch" aria-checked="false"></div>
+                </label>
+            </div>
+
+            <button class="mobile-toggle" id="mobileToggle" aria-expanded="false" aria-controls="mobileNav" aria-label="Open menu">
+                <!-- hamburger icon -->
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+
+        <div class="mobile-nav" id="mobileNav" role="menu" aria-hidden="true">
+            <a href="#" role="menuitem">Home</a>
+            <a href="#about" role="menuitem">About</a>
+            <a href="#enroll" role="menuitem">Enroll</a>
+            <a href="#contact" role="menuitem">Contact</a>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero reveal" id="hero">
+        <img src="logo.jpeg" class="hero-img floating" alt="MindCraft Logo">
+        <h1>Excellence for <span>Classes 1 to 10</span></h1>
+        <p style="max-width: 800px; margin: 0 auto 24px; color: var(--text-secondary); font-size: 1.05rem;">
+            Empowering the next generation with personalized coaching, conceptual learning, and academic discipline.
+        </p>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLScLGycQa05mXqTH2dZa1YxzZyxxPRXDMttIeQQhcAeycS5niQ/viewform" class="reg-btn" aria-label="Start Learning Today">Start Learning Today</a>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="reveal">
+        <h2 style="font-size: 2.2rem; margin-bottom: 12px;">About MindCraft Coaching</h2>
+        <p style="color: var(--text-secondary); font-size: 1.05rem;">
+            MindCraft Coaching is dedicated to building strong academic foundations for students of Classes 1–10.
+            With conceptual learning, weekly tests, and personalized guidance, we ensure every child grows with confidence.
+        </p>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="grid reveal" aria-label="Features">
+        <div class="card floating">
+            <h3>Conceptual Focus</h3>
+            <p style="color: var(--text-secondary);">Understanding over memorizing — building strong roots.</p>
+        </div>
+        <div class="card floating">
+            <h3>Weekly Mock Tests</h3>
+            <p style="color: var(--text-secondary);">Track progress and improve before exams.</p>
+        </div>
+        <div class="card floating">
+            <h3>Board Preparation</h3>
+            <p style="color: var(--text-secondary);">Special attention for Class 10 students.</p>
+        </div>
+    </section>
+
+    <!-- ENROLL -->
+    <section id="enroll" class="reveal" style="text-align:center; padding: 60px 20px; background: var(--bg-secondary); border-radius: 20px; margin: 24px 5%;">
+        <h2 style="font-size: 2rem; margin-bottom: 12px;">Ready to Enroll?</h2>
+        <p style="margin-bottom: 24px; color: var(--text-secondary);">Join hundreds of students who improved their grades.</p>
+        <a href="#" class="reg-btn" aria-label="Enroll for Free Demo Class">Enroll for Free Demo Class</a>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="reveal">
+        <h2 style="font-size: 2rem; margin-bottom: 12px;">Contact Us</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 8px;">📍 Lucknow, Uttar Pradesh</p>
+        <p style="color: var(--text-secondary); margin-bottom: 8px;">📞 +91 8318401512</p>
+        <p style="color: var(--text-secondary); margin-bottom: 8px;">📧 mindcraftcoaching@gmail.com</p>
+        <p style="color: var(--text-secondary); margin-top: 12px; font-size:0.95rem;">
+            Tap the WhatsApp button to message us directly or follow us on Instagram for updates and class highlights.
+        </p>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 MindCraft Coaching. Building Brighter Futures.</p>
+    </footer>
+
+    <!-- Floating contact buttons -->
+    <div class="contact-float" aria-hidden="false">
+        <!-- WhatsApp -->
+        <a class="contact-btn whatsapp" href="https://wa.me/918318401512?text=Hello%20MindCraft%20Coaching%2C%20I%20want%20to%20know%20about%20the%20classes" target="_blank" rel="noopener noreferrer" aria-label="Message on WhatsApp">
+            <!-- WhatsApp SVG -->
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M20.52 3.48A11.9 11.9 0 0012 0C5.373 0 .001 5.373.001 12c0 2.116.553 4.18 1.6 6.01L0 24l6.2-1.6A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12 0-3.2-1.25-6.2-3.48-8.52zM12 21.6c-1.9 0-3.74-.5-5.34-1.44l-.38-.22-3.68.95.98-3.58-.25-.38A9.6 9.6 0 012.4 12 9.6 9.6 0 0112 2.4 9.6 9.6 0 0121.6 12 9.6 9.6 0 0112 21.6zM17.1 14.2c-.3-.15-1.78-.88-2.06-.98-.28-.1-.48-.15-.68.15-.2.3-.78.98-.96 1.18-.18.2-.36.22-.66.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.77-1.65-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.36.45-.54.15-.18.2-.3.3-.5.1-.2 0-.38-.05-.53-.05-.15-.68-1.64-.93-2.25-.24-.58-.49-.5-.68-.51l-.58-.01c-.2 0-.52.07-.8.37-.28.3-1.08 1.05-1.08 2.56 0 1.5 1.1 2.95 1.25 3.16.15.2 2.15 3.3 5.2 4.63 3.05 1.33 3.05.89 3.6.83.55-.06 1.78-.72 2.03-1.42.25-.7.25-1.3.18-1.42-.07-.12-.28-.2-.58-.35z"/>
+            </svg>
+            <span style="font-size:0.95rem;">WhatsApp</span>
+        </a>
+
+        <!-- Instagram -->
+        <a class="contact-btn instagram" href="https://instagram.com/mindcraftcoaching" target="_blank" rel="noopener noreferrer" aria-label="Open Instagram">
+            <!-- Instagram SVG -->
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M7 2h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5V7a5 5 0 015-5zm0 2a3 3 0 00-3 3v10a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H7zm5 3.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9zm0 2a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM17.5 6a1 1 0 110 2 1 1 0 010-2z"/>
+            </svg>
+            <span style="font-size:0.95rem;">Instagram</span>
+        </a>
+    </div>
+
+    <script>
+        // Theme toggle
+        function toggleTheme() {
+            const body = document.body;
+            const checkbox = document.getElementById('checkbox');
+            if (checkbox.checked) {
+                body.setAttribute('data-theme', 'dark');
+                document.querySelector('.slider').setAttribute('aria-checked', 'true');
+            } else {
+                body.removeAttribute('data-theme');
+                document.querySelector('.slider').setAttribute('aria-checked', 'false');
+            }
+        }
+
+        // Mobile menu toggle
+        (function() {
+            const toggle = document.getElementById('mobileToggle');
+            const mobileNav = document.getElementById('mobileNav');
+            toggle.addEventListener('click', () => {
+                const expanded = toggle.getAttribute('aria-expanded') === 'true';
+                toggle.setAttribute('aria-expanded', String(!expanded));
+                mobileNav.style.display = expanded ? 'none' : 'block';
+                mobileNav.setAttribute('aria-hidden', String(expanded));
+                // change icon to X when open
+                toggle.innerHTML = expanded ? 
+                    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>` :
+                    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>`;
+            });
+
+            // Close mobile nav when clicking a link
+            mobileNav.addEventListener('click', (e) => {
+                if (e.target.tagName === 'A') {
+                    mobileNav.style.display = 'none';
+                    toggle.setAttribute('aria-expanded', 'false');
+                    mobileNav.setAttribute('aria-hidden', 'true');
+                    toggle.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>`;
+                }
+            });
+
+            // Close mobile nav on outside click
+            document.addEventListener('click', (e) => {
+                if (!mobileNav.contains(e.target) && !toggle.contains(e.target)) {
+                    mobileNav.style.display = 'none';
+                    toggle.setAttribute('aria-expanded', 'false');
+                    mobileNav.setAttribute('aria-hidden', 'true');
+                    toggle.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>`;
+                }
+            });
+        })();
+
+        // Navbar scroll transition
+        (function() {
+            const navbar = document.getElementById('navbar');
+            const threshold = 40;
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > threshold) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            }, { passive: true });
+        })();
+
+        // Reveal on scroll using IntersectionObserver
+        (function() {
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.12 };
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal, .grid, #hero, #about, #enroll, #contact').forEach(el => {
+                observer.observe(el);
+            });
+        })();
+
+        // Improve tap target for contact buttons on iOS (prevent double-tap zoom)
+        document.addEventListener('touchstart', function(){}, {passive: true});
+    </script>
+
+</body>
+</html>
